@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arisan UI - Tables</title>
+
+    <!-- Scripts & Styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../assets/js/config.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="../assets/js/app.js"></script>
+</head>
+
+<body
+    class="bg-gray-50 dark:bg-dark-bg text-gray-800 dark:text-gray-200 font-sans antialiased transition-colors duration-300"
+    x-data="vibeApp">
+
+    <div class="layout-wrapper">
+        <!-- Mobile Sidebar Backdrop -->
+        <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity
+            class="fixed inset-0 z-20 bg-black/50 lg:hidden"></div>
+
+        <!-- Sidebar -->
+        <aside :class="[
+                sidebarOpen ? 'translate-x-0' : '-translate-x-full',
+                sidebarMini ? 'w-20 sidebar-mini' : 'w-64'
+            ]"
+            class="sidebar fixed inset-y-0 left-0 z-30 bg-white dark:bg-dark-surface border-r border-gray-200 dark:border-dark-border transition-all duration-300 lg:translate-x-0 lg:static flex flex-col">
+
+            <div class="flex items-center h-16 border-b border-gray-100 dark:border-dark-border px-4 transition-all"
+                :class="sidebarMini ? 'justify-center' : 'justify-start gap-3'">
+                <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-layer-group text-sm"></i>
+                </div>
+                <span
+                    class="font-bold text-xl text-brand-600 dark:text-brand-400 whitespace-nowrap overflow-hidden transition-opacity duration-300"
+                    :class="sidebarMini ? 'opacity-0 w-0' : 'opacity-100'">
+                    Arisan UI
+                </span>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto no-scrollbar py-4 space-y-1">
+                <a href="../index.html"
+                    class="flex items-center gap-3 px-4 py-3 mx-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition group relative">
+                    <i class="fa-solid fa-grid-2 w-5 text-center flex-shrink-0"></i>
+                    <span
+                        class="font-bold whitespace-nowrap overflow-hidden transition-all duration-300 sidebar-text">Dashboard</span>
+                    <div x-show="sidebarMini"
+                        class="absolute left-full top-2 ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50 pointer-events-none">
+                        Dashboard</div>
+                </a>
+
+                <p class="px-6 text-xs font-bold text-gray-400 uppercase tracking-wider mt-6 mb-2 group-header transition-opacity duration-300"
+                    :class="sidebarMini ? 'opacity-0 hidden' : 'opacity-100'">Modules</p>
+                <div x-show="sidebarMini" class="h-4"></div>
+
+                <!-- Core Components -->
+                <div class="relative group" x-init="openMenus['core'] = true">
+                    <button @click="toggleSubmenu('core')"
+                        class="w-full flex items-center justify-between px-4 py-3 mx-2 pr-8 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition relative">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-cube w-5 text-center flex-shrink-0"></i>
+                            <span class="font-bold sidebar-text whitespace-nowrap">Components</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 sidebar-text"
+                            :class="isSubmenuOpen('core') ? 'rotate-180' : ''"></i>
+                        <div x-show="sidebarMini"
+                            class="absolute left-full top-2 ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50 pointer-events-none">
+                            Components</div>
+                    </button>
+
+                    <div class="submenu overflow-hidden bg-gray-50 dark:bg-gray-800/50 mx-2 rounded-b-xl"
+                        :class="isSubmenuOpen('core') && !sidebarMini ? 'open' : ''"
+                        :style="isSubmenuOpen('core') && !sidebarMini ? 'max-height: 500px' : ''">
+                        <a href="modals.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-regular fa-window-maximize w-4 opacity-70"></i> Modals
+                        </a>
+                        <a href="tables.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-brand-600 dark:text-brand-400 bg-brand-50/50 dark:bg-brand-900/10 font-bold transition">
+                            <i class="fa-solid fa-table w-4 opacity-70"></i> Tables
+                        </a>
+                        <a href="tabs.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-regular fa-folder w-4 opacity-70"></i> Tabs
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Advanced Modules -->
+                <div class="relative group">
+                    <button @click="toggleSubmenu('advanced')"
+                        class="w-full flex items-center justify-between px-4 py-3 mx-2 pr-8 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition relative">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-layer-group w-5 text-center flex-shrink-0"></i>
+                            <span class="font-bold sidebar-text whitespace-nowrap">Advanced</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 sidebar-text"
+                            :class="isSubmenuOpen('advanced') ? 'rotate-180' : ''"></i>
+                        <div x-show="sidebarMini"
+                            class="absolute left-full top-2 ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50 pointer-events-none">
+                            Advanced</div>
+                    </button>
+                    <div class="submenu overflow-hidden bg-gray-50 dark:bg-gray-800/50 mx-2 rounded-b-xl"
+                        :class="isSubmenuOpen('advanced') && !sidebarMini ? 'open' : ''"
+                        :style="isSubmenuOpen('advanced') && !sidebarMini ? 'max-height: 500px' : ''">
+                        <a href="../modules/charts.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-solid fa-chart-pie w-4 opacity-70"></i> Charts
+                        </a>
+                        <a href="../modules/gantt.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-solid fa-bars-progress w-4 opacity-70"></i> Gantt
+                        </a>
+                        <a href="../modules/date-pickers.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-regular fa-calendar w-4 opacity-70"></i> Pickers
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-gray-200 dark:border-dark-border">
+                <button @click="toggleMini()"
+                    class="w-full flex items-center gap-3 px-4 py-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition hidden lg:flex justify-center">
+                    <i class="fa-solid fa-chevron-left transition-transform duration-300"
+                        :class="sidebarMini ? 'rotate-180' : ''"></i>
+                    <span class="text-sm font-medium sidebar-text">Collapse</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content bg-gray-50 dark:bg-dark-bg transition-colors duration-300">
+            <header
+                class="h-16 bg-white dark:bg-dark-surface border-b border-gray-200 dark:border-dark-border flex items-center justify-between px-4 lg:px-8 sticky top-0 z-10">
+                <div class="flex items-center gap-4">
+                    <button @click="toggleSidebar" class="lg:hidden text-gray-500 hover:text-brand-600 transition">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <h2 class="text-lg font-bold text-gray-700 dark:text-white hidden sm:block">Tables</h2>
+                </div>
+
+                <div class="flex items-center gap-4 ml-auto">
+                    <button @click="isDark = !isDark"
+                        class="w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        <i class="fa-solid fa-sun" x-show="!isDark"></i>
+                        <i class="fa-solid fa-moon" x-show="isDark" style="display: none;"></i>
+                    </button>
+                    <div
+                        class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold text-sm">
+                        A</div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto no-scrollbar p-4 lg:p-8 space-y-6">
+                <!-- Toolbar -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Members List</h1>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Manage your community member data.</p>
+                    </div>
+                    <div class="flex gap-3 w-full md:w-auto">
+                        <div class="relative flex-1 md:w-64">
+                            <i class="fa-solid fa-search absolute left-3 top-3.5 text-gray-400"></i>
+                            <input type="text" placeholder="Search..."
+                                class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border rounded-xl text-sm focus:border-brand-500 focus:outline-none dark:text-white transition">
+                        </div>
+                        <button
+                            class="px-3 py-2 bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border text-gray-600 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                            <i class="fa-solid fa-filter"></i>
+                        </button>
+                        <button
+                            class="px-4 py-2 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition shadow-lg shadow-brand-500/30 flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> <span class="hidden sm:inline">Add New</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table Container -->
+                <div
+                    class="bg-white dark:bg-dark-surface rounded-2xl shadow-sm border border-gray-100 dark:border-dark-border overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr
+                                    class="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-dark-border text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                                    <th class="py-4 pl-6 pr-4 font-bold">
+                                        <input type="checkbox"
+                                            class="rounded border-gray-300 text-brand-600 focus:ring-brand-500">
+                                    </th>
+                                    <th class="py-4 px-4 font-bold">Member</th>
+                                    <th class="py-4 px-4 font-bold">Status</th>
+                                    <th class="py-4 px-4 font-bold">Role</th>
+                                    <th class="py-4 px-4 font-bold">Joined</th>
+                                    <th class="py-4 px-4 font-bold text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-50 dark:divide-gray-800 text-sm">
+                                <!-- Row 1 -->
+                                <tr class="group hover:bg-gray-50 dark:hover:bg-gray-800/30 transition">
+                                    <td class="py-4 pl-6 pr-4">
+                                        <input type="checkbox"
+                                            class="rounded border-gray-300 text-brand-600 focus:ring-brand-500">
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-10 h-10 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold">
+                                                AS
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-gray-800 dark:text-white">Achmad Setiawan
+                                                </div>
+                                                <div class="text-xs text-gray-500">achmad@example.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4 text-gray-600 dark:text-gray-300">Admin</td>
+                                    <td class="py-4 px-4 text-gray-500 font-mono text-xs">2 hours ago</td>
+                                    <td class="py-4 px-4 text-right">
+                                        <div
+                                            class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition">
+                                            <button
+                                                class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-brand-600 transition">
+                                                <i class="fa-solid fa-pen"></i>
+                                            </button>
+                                            <button
+                                                class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-500 transition">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <!-- Row 2 -->
+                                <tr class="group hover:bg-gray-50 dark:hover:bg-gray-800/30 transition">
+                                    <td class="py-4 pl-6 pr-4">
+                                        <input type="checkbox"
+                                            class="rounded border-gray-300 text-brand-600 focus:ring-brand-500">
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
+                                                JD
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-gray-800 dark:text-white">John Doe</div>
+                                                <div class="text-xs text-gray-500">john@example.com</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                                            Offline
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4 text-gray-600 dark:text-gray-300">Member</td>
+                                    <td class="py-4 px-4 text-gray-500 font-mono text-xs">1 day ago</td>
+                                    <td class="py-4 px-4 text-right">
+                                        <div
+                                            class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition">
+                                            <button
+                                                class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-brand-600 transition">
+                                                <i class="fa-solid fa-pen"></i>
+                                            </button>
+                                            <button
+                                                class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:bg-red-50 dark:hover:bg-red-900/30 hover:text-red-500 transition">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div
+                        class="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-dark-border bg-gray-50/50 dark:bg-gray-800/50">
+                        <div class="text-xs text-gray-500 dark:text-gray-400">
+                            Showing <span class="font-bold">1</span> to <span class="font-bold">2</span> of <span
+                                class="font-bold">12</span> results
+                        </div>
+                        <div class="flex gap-1">
+                            <button
+                                class="w-8 h-8 rounded-lg flex items-center justify-center bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700 transition disabled:opacity-50"
+                                disabled>
+                                <i class="fa-solid fa-chevron-left text-xs"></i>
+                            </button>
+                            <button
+                                class="w-8 h-8 rounded-lg flex items-center justify-center bg-brand-600 text-white font-bold text-xs shadow-md">1</button>
+                            <button
+                                class="w-8 h-8 rounded-lg flex items-center justify-center bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border text-gray-600 dark:text-gray-300 font-bold text-xs hover:bg-gray-50 dark:hover:bg-gray-700 transition">2</button>
+                            <button
+                                class="w-8 h-8 rounded-lg flex items-center justify-center bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border text-gray-600 dark:text-gray-300 font-bold text-xs hover:bg-gray-50 dark:hover:bg-gray-700 transition">3</button>
+                            <button
+                                class="w-8 h-8 rounded-lg flex items-center justify-center bg-white dark:bg-dark-surface border border-gray-200 dark:border-dark-border text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                                <i class="fa-solid fa-chevron-right text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>

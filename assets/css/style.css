@@ -1,0 +1,194 @@
+/* Arisan UI - Custom Styles */
+
+/* Base Typography */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+    -webkit-tap-highlight-color: transparent;
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+/* --- LAYOUT UTILITIES --- */
+.layout-wrapper {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+}
+
+/* --- SIDEBAR --- */
+.sidebar {
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-mini .sidebar-text {
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+}
+
+.sidebar-mini .group-header {
+    display: none;
+}
+
+/* Submenu Transitions */
+.submenu {
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    max-height: 0;
+}
+
+.submenu.open {
+    max-height: 500px;
+    /* Arbitrary large height */
+}
+
+
+/* --- SCROLLBARS --- */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.thin-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 20px;
+}
+
+.dark .thin-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #475569;
+}
+
+/* --- FLATPICKR DARK MODE FIX --- */
+.dark .flatpickr-calendar {
+    background: #1e293b !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark .flatpickr-month {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+    fill: #f8fafc !important;
+}
+
+.dark .flatpickr-current-month .flatpickr-monthDropdown-months {
+    background: #1e293b !important;
+    color: #f8fafc !important;
+}
+
+.dark .flatpickr-current-month .flatpickr-monthDropdown-months:hover {
+    background: #334155 !important;
+}
+
+.dark .flatpickr-current-month input.cur-year {
+    color: #f8fafc !important;
+}
+
+.dark span.flatpickr-weekday {
+    background: #1e293b !important;
+    color: #94a3b8 !important;
+}
+
+.dark .flatpickr-day {
+    color: #e2e8f0 !important;
+}
+
+.dark .flatpickr-day:hover,
+.dark .flatpickr-day:focus {
+    background: #334155 !important;
+    border-color: #334155 !important;
+}
+
+.dark .flatpickr-day.selected {
+    background: #8b5cf6 !important;
+    border-color: #8b5cf6 !important;
+    color: white !important;
+}
+
+.dark .flatpickr-months .flatpickr-prev-month,
+.dark .flatpickr-months .flatpickr-next-month {
+    fill: #f8fafc !important;
+}
+
+.dark .flatpickr-months .flatpickr-prev-month:hover svg,
+.dark .flatpickr-months .flatpickr-next-month:hover svg {
+    fill: #8b5cf6 !important;
+}
+
+/* Month Select Plugin Dark Mode Overrides */
+.dark .flatpickr-monthSelect-theme-light {
+    background: #1e293b !important;
+}
+
+.dark .flatpickr-monthSelect-month {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #cbd5e1 !important;
+}
+
+.dark .flatpickr-monthSelect-month.selected {
+    background: #8b5cf6 !important;
+    border-color: #8b5cf6 !important;
+    color: #ffffff !important;
+}
+
+.dark .flatpickr-monthSelect-month:hover {
+    background: #334155 !important;
+    color: #ffffff !important;
+}
+
+/* --- ANIMATIONS --- */
+@keyframes spin-names {
+    0% {
+        opacity: 0.8;
+        transform: translateY(-2px);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0.8;
+        transform: translateY(2px);
+    }
+}
+
+.spin-animation {
+    animation: spin-names 0.1s infinite;
+}
+
+/* Wheel Styles */
+.wheel-container {
+    transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.dark .wheel-container {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+}

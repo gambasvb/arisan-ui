@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe UI - Mobile Layout</title>
+
+    <!-- Scripts & Styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../assets/js/config.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="../assets/js/app.js"></script>
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 font-sans antialiased flex items-center justify-center min-h-screen p-4"
+    x-data="vibeApp">
+
+    <!-- Mobile Device Frame -->
+    <div
+        class="w-full max-w-[375px] h-[812px] bg-white dark:bg-dark-surface rounded-[3rem] shadow-2xl relative overflow-hidden flex flex-col border-[8px] border-gray-900 dark:border-gray-800 ring-1 ring-gray-900/5">
+
+        <!-- Notion Header -->
+        <div class="absolute top-0 left-0 right-0 h-6 bg-black z-50 rounded-t-[2.5rem]"></div>
+        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-6 bg-black rounded-b-2xl z-50"></div>
+
+        <!-- App Content -->
+
+        <!-- Header -->
+        <header class="pt-12 pb-6 px-6 bg-brand-600 text-white rounded-b-[2rem] shadow-lg relative z-20">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <p class="text-brand-100 text-xs font-bold uppercase tracking-wider">Good Morning,</p>
+                    <h1 class="text-2xl font-bold">Achmad</h1>
+                </div>
+                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                    <i class="fa-solid fa-bell"></i>
+                </div>
+            </div>
+
+            <!-- Quick Search -->
+            <div class="relative">
+                <i class="fa-solid fa-search absolute left-4 top-3.5 text-brand-200"></i>
+                <input type="text" placeholder="Search..."
+                    class="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-brand-200 focus:outline-none focus:bg-white/20 transition backdrop-blur-sm text-sm">
+            </div>
+        </header>
+
+        <!-- Scrollable Body -->
+        <main class="flex-1 overflow-y-auto no-scrollbar p-6 space-y-4 bg-gray-50 dark:bg-dark-bg">
+
+            <!-- Featured Card -->
+            <div
+                class="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl p-5 text-white shadow-lg relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-white opacity-10 rounded-full -mr-5 -mt-5"></div>
+                <h3 class="font-bold text-lg mb-1 relative z-10">Vibe Pro</h3>
+                <p class="text-indigo-100 text-xs mb-4 relative z-10">Upgrade for more features.</p>
+                <button class="bg-white text-indigo-600 px-4 py-2 rounded-lg text-xs font-bold shadow-md">Check
+                    Now</button>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div
+                    class="bg-white dark:bg-dark-surface p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center gap-2 aspect-square">
+                    <div
+                        class="w-10 h-10 bg-green-100 dark:bg-green-900/30 text-green-600 rounded-full flex items-center justify-center">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <span class="text-sm font-bold dark:text-white">Wallet</span>
+                </div>
+                <div
+                    class="bg-white dark:bg-dark-surface p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center gap-2 aspect-square">
+                    <div
+                        class="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 text-orange-600 rounded-full flex items-center justify-center">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <span class="text-sm font-bold dark:text-white">Stats</span>
+                </div>
+            </div>
+
+            <!-- List -->
+            <div class="bg-white dark:bg-dark-surface rounded-2xl p-4 shadow-sm">
+                <h3 class="font-bold text-gray-800 dark:text-white mb-3">Recent Activity</h3>
+                <div class="space-y-3">
+                    <div
+                        class="flex items-center gap-3 border-b border-gray-50 dark:border-gray-800/50 pb-3 last:border-0 last:pb-0">
+                        <div
+                            class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-arrow-up text-gray-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-xs font-bold dark:text-gray-200">Sent Money</p>
+                            <p class="text-[10px] text-gray-400">Today, 10:00 AM</p>
+                        </div>
+                        <span class="text-xs font-bold text-red-500">-$50.00</span>
+                    </div>
+                    <div
+                        class="flex items-center gap-3 border-b border-gray-50 dark:border-gray-800/50 pb-3 last:border-0 last:pb-0">
+                        <div
+                            class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs">
+                            <i class="fa-solid fa-arrow-down text-gray-400"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-xs font-bold dark:text-gray-200">Received Money</p>
+                            <p class="text-[10px] text-gray-400">Yesterday</p>
+                        </div>
+                        <span class="text-xs font-bold text-green-500">+$120.00</span>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Bottom Nav -->
+        <nav
+            class="bg-white dark:bg-dark-surface h-20 px-6 flex justify-between items-center shadow-[0_-5px_20px_-5px_rgba(0,0,0,0.05)] relative z-30">
+            <button class="flex flex-col items-center gap-1 text-brand-600 dark:text-brand-400">
+                <i class="fa-solid fa-home text-lg"></i>
+                <span class="text-[10px] font-bold">Home</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600 transition">
+                <i class="fa-solid fa-compass text-lg"></i>
+                <span class="text-[10px] font-medium">Explore</span>
+            </button>
+            <div
+                class="-mt-8 bg-brand-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-brand-500/40 border-4 border-gray-100 dark:border-dark-bg">
+                <i class="fa-solid fa-plus text-xl"></i>
+            </div>
+            <button class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600 transition">
+                <i class="fa-solid fa-chart-simple text-lg"></i>
+                <span class="text-[10px] font-medium">Stats</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-gray-400 hover:text-brand-600 transition">
+                <i class="fa-solid fa-user text-lg"></i>
+                <span class="text-[10px] font-medium">Profile</span>
+            </button>
+        </nav>
+
+    </div>
+
+</body>
+
+</html>

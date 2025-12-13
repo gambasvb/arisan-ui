@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arisan UI - Pickers</title>
+
+    <!-- Scripts & Styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../assets/js/config.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="../assets/js/app.js"></script>
+
+    <!-- Flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/airbnb.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/plugins/monthSelect/index.js"></script>
+    <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/plugins/monthSelect/style.css">
+</head>
+
+<body
+    class="bg-gray-50 dark:bg-dark-bg text-gray-800 dark:text-gray-200 font-sans antialiased transition-colors duration-300"
+    x-data="vibeApp">
+
+    <div class="layout-wrapper">
+        <!-- Mobile Sidebar Backdrop -->
+        <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity
+            class="fixed inset-0 z-20 bg-black/50 lg:hidden"></div>
+
+        <!-- Sidebar -->
+        <aside :class="[
+                sidebarOpen ? 'translate-x-0' : '-translate-x-full',
+                sidebarMini ? 'w-20 sidebar-mini' : 'w-64'
+            ]"
+            class="sidebar fixed inset-y-0 left-0 z-30 bg-white dark:bg-dark-surface border-r border-gray-200 dark:border-dark-border transition-all duration-300 lg:translate-x-0 lg:static flex flex-col">
+
+            <div class="flex items-center h-16 border-b border-gray-100 dark:border-dark-border px-4 transition-all"
+                :class="sidebarMini ? 'justify-center' : 'justify-start gap-3'">
+                <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-layer-group text-sm"></i>
+                </div>
+                <span
+                    class="font-bold text-xl text-brand-600 dark:text-brand-400 whitespace-nowrap overflow-hidden transition-opacity duration-300"
+                    :class="sidebarMini ? 'opacity-0 w-0' : 'opacity-100'">
+                    Arisan UI
+                </span>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto no-scrollbar py-4 space-y-1">
+                <a href="../index.html"
+                    class="flex items-center gap-3 px-4 py-3 mx-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition group relative">
+                    <i class="fa-solid fa-grid-2 w-5 text-center flex-shrink-0"></i>
+                    <span
+                        class="font-bold whitespace-nowrap overflow-hidden transition-all duration-300 sidebar-text">Dashboard</span>
+                    <div x-show="sidebarMini"
+                        class="absolute left-full top-2 ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50 pointer-events-none">
+                        Dashboard</div>
+                </a>
+
+                <p class="px-6 text-xs font-bold text-gray-400 uppercase tracking-wider mt-6 mb-2 group-header transition-opacity duration-300"
+                    :class="sidebarMini ? 'opacity-0 hidden' : 'opacity-100'">Modules</p>
+                <div x-show="sidebarMini" class="h-4"></div>
+
+                <!-- Core Components -->
+                <div class="relative group">
+                    <button @click="toggleSubmenu('core')"
+                        class="w-full flex items-center justify-between px-4 py-3 mx-2 pr-8 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition relative">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-cube w-5 text-center flex-shrink-0"></i>
+                            <span class="font-bold sidebar-text whitespace-nowrap">Components</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 sidebar-text"
+                            :class="isSubmenuOpen('core') ? 'rotate-180' : ''"></i>
+                        <div x-show="sidebarMini"
+                            class="absolute left-full top-2 ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50 pointer-events-none">
+                            Components</div>
+                    </button>
+
+                    <div class="submenu overflow-hidden bg-gray-50 dark:bg-gray-800/50 mx-2 rounded-b-xl"
+                        :class="isSubmenuOpen('core') && !sidebarMini ? 'open' : ''"
+                        :style="isSubmenuOpen('core') && !sidebarMini ? 'max-height: 500px' : ''">
+                        <a href="../components/modals.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-regular fa-window-maximize w-4 opacity-70"></i> Modals
+                        </a>
+                        <a href="../components/tables.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-solid fa-table w-4 opacity-70"></i> Tables
+                        </a>
+                        <a href="../components/tabs.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-regular fa-folder w-4 opacity-70"></i> Tabs
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Advanced Modules -->
+                <div class="relative group" x-init="openMenus['advanced'] = true">
+                    <button @click="toggleSubmenu('advanced')"
+                        class="w-full flex items-center justify-between px-4 py-3 mx-2 pr-8 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition relative">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-layer-group w-5 text-center flex-shrink-0"></i>
+                            <span class="font-bold sidebar-text whitespace-nowrap">Advanced</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 sidebar-text"
+                            :class="isSubmenuOpen('advanced') ? 'rotate-180' : ''"></i>
+                        <div x-show="sidebarMini"
+                            class="absolute left-full top-2 ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50 pointer-events-none">
+                            Advanced</div>
+                    </button>
+                    <div class="submenu overflow-hidden bg-gray-50 dark:bg-gray-800/50 mx-2 rounded-b-xl open"
+                        :class="isSubmenuOpen('advanced') && !sidebarMini ? 'open' : ''" style="max-height: 500px"
+                        :style="isSubmenuOpen('advanced') && !sidebarMini ? 'max-height: 500px' : ''">
+                        <a href="charts.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-solid fa-chart-pie w-4 opacity-70"></i> Charts
+                        </a>
+                        <a href="gantt.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-solid fa-bars-progress w-4 opacity-70"></i> Gantt
+                        </a>
+                        <a href="date-pickers.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-brand-600 dark:text-brand-400 bg-brand-50/50 dark:bg-brand-900/10 font-bold transition">
+                            <i class="fa-regular fa-calendar w-4 opacity-70"></i> Pickers
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-gray-200 dark:border-dark-border">
+                <button @click="toggleMini()"
+                    class="w-full flex items-center gap-3 px-4 py-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition hidden lg:flex justify-center">
+                    <i class="fa-solid fa-chevron-left transition-transform duration-300"
+                        :class="sidebarMini ? 'rotate-180' : ''"></i>
+                    <span class="text-sm font-medium sidebar-text">Collapse</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content bg-gray-50 dark:bg-dark-bg transition-colors duration-300">
+            <header
+                class="h-16 bg-white dark:bg-dark-surface border-b border-gray-200 dark:border-dark-border flex items-center justify-between px-4 lg:px-8 sticky top-0 z-10">
+                <div class="flex items-center gap-4">
+                    <button @click="toggleSidebar" class="lg:hidden text-gray-500 hover:text-brand-600 transition">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <h2 class="text-lg font-bold text-gray-700 dark:text-white hidden sm:block">Picker Modules</h2>
+                </div>
+
+                <div class="flex items-center gap-4 ml-auto">
+                    <button @click="isDark = !isDark"
+                        class="w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        <i class="fa-solid fa-sun" x-show="!isDark"></i>
+                        <i class="fa-solid fa-moon" x-show="isDark" style="display: none;"></i>
+                    </button>
+                    <div
+                        class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold text-sm">
+                        A</div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto no-scrollbar p-4 lg:p-8 space-y-6">
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Picker Modules</h1>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">Date, time, and icon selection components.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                    <!-- Date Pickers -->
+                    <div
+                        class="bg-white dark:bg-dark-surface p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-dark-border space-y-6">
+                        <h3
+                            class="font-bold text-lg dark:text-white border-b border-gray-100 dark:border-gray-700 pb-2">
+                            Flatpickr Integration</h3>
+
+                        <!-- Basic Date -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Basic
+                                Date</label>
+                            <input type="text" id="basic-date"
+                                class="w-full px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-800 focus:border-brand-500 focus:ring-4 focus:ring-brand-100 dark:focus:ring-brand-900 outline-none transition"
+                                placeholder="Select Date...">
+                        </div>
+
+                        <!-- Year Picker -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Month & Year
+                                Picker</label>
+                            <input type="text" id="month-year"
+                                class="w-full px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-800 focus:border-brand-500 focus:ring-4 focus:ring-brand-100 dark:focus:ring-brand-900 outline-none transition"
+                                placeholder="Select Month...">
+                        </div>
+
+                        <!-- Range -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date
+                                Range</label>
+                            <input type="text" id="date-range"
+                                class="w-full px-5 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-800 focus:border-brand-500 focus:ring-4 focus:ring-brand-100 dark:focus:ring-brand-900 outline-none transition"
+                                placeholder="Start Date to End Date...">
+                        </div>
+                    </div>
+
+                    <!-- Icon Picker -->
+                    <div class="bg-white dark:bg-dark-surface p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-dark-border"
+                        x-data="iconPicker()">
+                        <h3
+                            class="font-bold text-lg dark:text-white border-b border-gray-100 dark:border-gray-700 pb-2 mb-4">
+                            Icon Picker</h3>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select
+                                Icon</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-search absolute left-4 top-4 text-gray-400"></i>
+                                <input type="text" x-model="search" placeholder="Search icon (e.g. users, home)..."
+                                    class="w-full pl-11 pr-5 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-800 focus:border-brand-500 focus:ring-4 focus:ring-brand-100 dark:focus:ring-brand-900 outline-none transition">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-6 gap-2 max-h-[300px] overflow-y-auto thin-scrollbar p-1">
+                            <template x-for="icon in filteredIcons" :key="icon">
+                                <button @click="selected = icon"
+                                    class="aspect-square rounded-xl flex flex-col items-center justify-center gap-1 hover:bg-brand-50 dark:hover:bg-brand-900/40 transition border border-transparent hover:border-brand-200 dark:hover:border-brand-700"
+                                    :class="selected === icon ? 'bg-brand-50 dark:bg-brand-900/40 border-brand-500 ring-2 ring-brand-200' : ''">
+                                    <i :class="'fa-solid fa-' + icon"
+                                        class="text-xl text-gray-700 dark:text-gray-300"></i>
+                                </button>
+                            </template>
+                        </div>
+
+                        <div class="mt-4 p-3 bg-gray-50 dark:bg-gray-800 rounded-xl flex items-center justify-between">
+                            <span class="text-sm text-gray-500 dark:text-gray-400">Selected:</span>
+                            <div class="flex items-center gap-2" x-show="selected">
+                                <i :class="'fa-solid fa-' + selected" class="text-brand-600 dark:text-brand-400"></i>
+                                <span class="font-mono text-sm font-bold text-gray-800 dark:text-white"
+                                    x-text="'fa-' + selected"></span>
+                            </div>
+                            <span x-show="!selected" class="text-sm text-gray-400 italic">None</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Init Flatpickr
+        flatpickr("#basic-date", {
+            dateFormat: "Y-m-d"
+        });
+
+        flatpickr("#date-range", {
+            mode: "range",
+            dateFormat: "Y-m-d"
+        });
+
+        flatpickr("#month-year", {
+            plugins: [
+                new monthSelectPlugin({
+                    shorthand: true, //defaults to false
+                    dateFormat: "F Y", //defaults to "F Y"
+                    altFormat: "F Y", //defaults to "F Y"
+                    theme: "light" // defaults to "light"
+                })
+            ]
+        });
+
+        // Icon Picker Data
+        function iconPicker() {
+            return {
+                search: '',
+                selected: 'users',
+                icons: [
+                    'users', 'home', 'cog', 'bell', 'calendar', 'check', 'times',
+                    'search', 'plus', 'minus', 'edit', 'trash', 'save', 'download',
+                    'upload', 'image', 'camera', 'video', 'music', 'layer-group',
+                    'chart-pie', 'chart-line', 'chart-bar', 'table', 'clipboard',
+                    'bars-progress', 'crown', 'gift', 'wallet', 'money-bill',
+                    'arrow-right', 'arrow-left', 'arrow-up', 'arrow-down', 'dice',
+                    'dice-one', 'dice-two', 'dice-three', 'dice-four', 'dice-five',
+                    'wifi', 'battery-full', 'bolt', 'bug', 'code', 'terminal',
+                    'window-maximize', 'window-minimize', 'folder', 'folder-open',
+                    'file', 'file-alt', 'file-pdf', 'file-word', 'file-excel'
+                ],
+                get filteredIcons() {
+                    return this.icons.filter(i => i.includes(this.search.toLowerCase()));
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

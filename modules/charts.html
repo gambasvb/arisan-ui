@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arisan UI - Charts</title>
+
+    <!-- Scripts & Styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../assets/js/config.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="../assets/js/app.js"></script>
+
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+
+<body
+    class="bg-gray-50 dark:bg-dark-bg text-gray-800 dark:text-gray-200 font-sans antialiased transition-colors duration-300"
+    x-data="vibeApp">
+
+    <div class="layout-wrapper">
+        <!-- Mobile Sidebar Backdrop -->
+        <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity
+            class="fixed inset-0 z-20 bg-black/50 lg:hidden"></div>
+
+        <!-- Sidebar -->
+        <aside :class="[
+                sidebarOpen ? 'translate-x-0' : '-translate-x-full',
+                sidebarMini ? 'w-20 sidebar-mini' : 'w-64'
+            ]"
+            class="sidebar fixed inset-y-0 left-0 z-30 bg-white dark:bg-dark-surface border-r border-gray-200 dark:border-dark-border transition-all duration-300 lg:translate-x-0 lg:static flex flex-col">
+
+            <div class="flex items-center h-16 border-b border-gray-100 dark:border-dark-border px-4 transition-all"
+                :class="sidebarMini ? 'justify-center' : 'justify-start gap-3'">
+                <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-layer-group text-sm"></i>
+                </div>
+                <span
+                    class="font-bold text-xl text-brand-600 dark:text-brand-400 whitespace-nowrap overflow-hidden transition-opacity duration-300"
+                    :class="sidebarMini ? 'opacity-0 w-0' : 'opacity-100'">
+                    Arisan UI
+                </span>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto no-scrollbar py-4 space-y-1">
+                <a href="../index.html"
+                    class="flex items-center gap-3 px-4 py-3 mx-2 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition group relative">
+                    <i class="fa-solid fa-grid-2 w-5 text-center flex-shrink-0"></i>
+                    <span
+                        class="font-bold whitespace-nowrap overflow-hidden transition-all duration-300 sidebar-text">Dashboard</span>
+                    <div x-show="sidebarMini"
+                        class="absolute left-full top-2 ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50 pointer-events-none">
+                        Dashboard</div>
+                </a>
+
+                <p class="px-6 text-xs font-bold text-gray-400 uppercase tracking-wider mt-6 mb-2 group-header transition-opacity duration-300"
+                    :class="sidebarMini ? 'opacity-0 hidden' : 'opacity-100'">Modules</p>
+                <div x-show="sidebarMini" class="h-4"></div>
+
+                <!-- Core Components -->
+                <div class="relative group">
+                    <button @click="toggleSubmenu('core')"
+                        class="w-full flex items-center justify-between px-4 py-3 mx-2 pr-8 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition relative">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-cube w-5 text-center flex-shrink-0"></i>
+                            <span class="font-bold sidebar-text whitespace-nowrap">Components</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 sidebar-text"
+                            :class="isSubmenuOpen('core') ? 'rotate-180' : ''"></i>
+                        <div x-show="sidebarMini"
+                            class="absolute left-full top-2 ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50 pointer-events-none">
+                            Components</div>
+                    </button>
+
+                    <div class="submenu overflow-hidden bg-gray-50 dark:bg-gray-800/50 mx-2 rounded-b-xl"
+                        :class="isSubmenuOpen('core') && !sidebarMini ? 'open' : ''"
+                        :style="isSubmenuOpen('core') && !sidebarMini ? 'max-height: 500px' : ''">
+                        <a href="../components/modals.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-regular fa-window-maximize w-4 opacity-70"></i> Modals
+                        </a>
+                        <a href="../components/tables.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-solid fa-table w-4 opacity-70"></i> Tables
+                        </a>
+                        <a href="../components/tabs.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-regular fa-folder w-4 opacity-70"></i> Tabs
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Advanced Modules -->
+                <div class="relative group" x-init="openMenus['advanced'] = true">
+                    <button @click="toggleSubmenu('advanced')"
+                        class="w-full flex items-center justify-between px-4 py-3 mx-2 pr-8 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition relative">
+                        <div class="flex items-center gap-3">
+                            <i class="fa-solid fa-layer-group w-5 text-center flex-shrink-0"></i>
+                            <span class="font-bold sidebar-text whitespace-nowrap">Advanced</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs transition-transform duration-300 sidebar-text"
+                            :class="isSubmenuOpen('advanced') ? 'rotate-180' : ''"></i>
+                        <div x-show="sidebarMini"
+                            class="absolute left-full top-2 ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-50 pointer-events-none">
+                            Advanced</div>
+                    </button>
+                    <div class="submenu overflow-hidden bg-gray-50 dark:bg-gray-800/50 mx-2 rounded-b-xl open"
+                        :class="isSubmenuOpen('advanced') && !sidebarMini ? 'open' : ''" style="max-height: 500px"
+                        :style="isSubmenuOpen('advanced') && !sidebarMini ? 'max-height: 500px' : ''">
+                        <a href="charts.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-brand-600 dark:text-brand-400 bg-brand-50/50 dark:bg-brand-900/10 font-bold transition">
+                            <i class="fa-solid fa-chart-pie w-4 opacity-70"></i> Charts
+                        </a>
+                        <a href="gantt.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-solid fa-bars-progress w-4 opacity-70"></i> Gantt
+                        </a>
+                        <a href="date-pickers.html"
+                            class="flex items-center gap-3 px-4 py-2.5 pl-12 text-sm text-gray-500 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition">
+                            <i class="fa-regular fa-calendar w-4 opacity-70"></i> Pickers
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="p-4 border-t border-gray-200 dark:border-dark-border">
+                <button @click="toggleMini()"
+                    class="w-full flex items-center gap-3 px-4 py-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition hidden lg:flex justify-center">
+                    <i class="fa-solid fa-chevron-left transition-transform duration-300"
+                        :class="sidebarMini ? 'rotate-180' : ''"></i>
+                    <span class="text-sm font-medium sidebar-text">Collapse</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content bg-gray-50 dark:bg-dark-bg transition-colors duration-300">
+            <header
+                class="h-16 bg-white dark:bg-dark-surface border-b border-gray-200 dark:border-dark-border flex items-center justify-between px-4 lg:px-8 sticky top-0 z-10">
+                <div class="flex items-center gap-4">
+                    <button @click="toggleSidebar" class="lg:hidden text-gray-500 hover:text-brand-600 transition">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <h2 class="text-lg font-bold text-gray-700 dark:text-white hidden sm:block">Charts</h2>
+                </div>
+
+                <div class="flex items-center gap-4 ml-auto">
+                    <button @click="isDark = !isDark"
+                        class="w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        <i class="fa-solid fa-sun" x-show="!isDark"></i>
+                        <i class="fa-solid fa-moon" x-show="isDark" style="display: none;"></i>
+                    </button>
+                    <div
+                        class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold text-sm">
+                        A</div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto no-scrollbar p-4 lg:p-8 space-y-6">
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold text-gray-800 dark:text-white">ApexCharts Integration</h1>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm">Responsive and theme-aware charts.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Line Chart -->
+                    <div
+                        class="bg-white dark:bg-dark-surface p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-dark-border">
+                        <h3 class="font-bold text-lg mb-4 dark:text-white">Revenue Growth</h3>
+                        <div id="chart-area" class="w-full h-[300px]"></div>
+                    </div>
+
+                    <!-- Donut Chart -->
+                    <div
+                        class="bg-white dark:bg-dark-surface p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-dark-border">
+                        <h3 class="font-bold text-lg mb-4 dark:text-white">User Distribution</h3>
+                        <div id="chart-pie" class="w-full h-[300px] flex items-center justify-center"></div>
+                    </div>
+
+                    <!-- Bar Chart -->
+                    <div
+                        class="bg-white dark:bg-dark-surface p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-dark-border lg:col-span-2">
+                        <h3 class="font-bold text-lg mb-4 dark:text-white">Monthly Active Users</h3>
+                        <div class="overflow-x-auto">
+                            <div id="chart-bar" class="w-full h-[300px] min-w-[600px]"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Shared Options
+        const getChartColors = () => {
+            const isDark = document.documentElement.classList.contains('dark');
+            return {
+                text: isDark ? '#94a3b8' : '#64748b',
+                grid: isDark ? '#334155' : '#e2e8f0',
+                brand: '#8b5cf6',
+            }
+        };
+
+        // Area Chart
+        var optionsArea = {
+            series: [{
+                name: 'Revenue',
+                data: [31, 40, 28, 51, 42, 109, 100]
+            }],
+            chart: {
+                height: 300,
+                type: 'area',
+                toolbar: { show: false },
+                background: 'transparent'
+            },
+            theme: { mode: 'light' }, // We handle colors manually
+            colors: ['#8b5cf6'],
+            dataLabels: { enabled: false },
+            stroke: { curve: 'smooth' },
+            xaxis: {
+                categories: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                labels: { style: { colors: '#94a3b8' } }
+            },
+            yaxis: {
+                labels: { style: { colors: '#94a3b8' } }
+            },
+            grid: {
+                borderColor: '#e2e8f0',
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.2,
+                    stops: [0, 90, 100]
+                }
+            }
+        };
+
+        var chartArea = new ApexCharts(document.querySelector("#chart-area"), optionsArea);
+        chartArea.render();
+
+        // Pie Chart
+        var optionsPie = {
+            series: [44, 55, 13, 33],
+            labels: ['Android', 'iOS', 'Web', 'Desktop'],
+            chart: {
+                width: 380,
+                type: 'donut',
+                background: 'transparent'
+            },
+            colors: ['#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe'],
+            stroke: { show: false },
+            dataLabels: { enabled: false },
+            legend: {
+                position: 'bottom',
+                labels: { colors: '#94a3b8' }
+            },
+            plotOptions: {
+                pie: { donut: { labels: { show: true, total: { show: true, color: '#94a3b8' } } } }
+            }
+        };
+
+        var chartPie = new ApexCharts(document.querySelector("#chart-pie"), optionsPie);
+        chartPie.render();
+
+        // Bar Chart
+        var optionsBar = {
+            series: [{
+                name: 'Users',
+                data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
+            }],
+            chart: {
+                type: 'bar',
+                height: 300,
+                toolbar: { show: false },
+                background: 'transparent'
+            },
+            colors: ['#7c3aed'],
+            plotOptions: {
+                bar: { borderRadius: 4, horizontal: false, }
+            },
+            dataLabels: { enabled: false },
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+                labels: { style: { colors: '#94a3b8' } }
+            },
+            yaxis: {
+                labels: { style: { colors: '#94a3b8' } }
+            },
+            grid: { borderColor: '#e2e8f0' }
+        };
+
+        var chartBar = new ApexCharts(document.querySelector("#chart-bar"), optionsBar);
+        chartBar.render();
+
+        // Dark Mode Listener to update charts
+        const observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (mutation.attributeName === "class") {
+                    const isDark = document.documentElement.classList.contains('dark');
+                    const color = isDark ? '#94a3b8' : '#64748b';
+                    const gridColor = isDark ? '#334155' : '#e2e8f0';
+                    const donutTotalColor = isDark ? '#ffffff' : '#1e293b';
+
+                    // Update Charts
+                    chartArea.updateOptions({
+                        xaxis: { labels: { style: { colors: color } } },
+                        yaxis: { labels: { style: { colors: color } } },
+                        grid: { borderColor: gridColor }
+                    });
+
+                    chartBar.updateOptions({
+                        xaxis: { labels: { style: { colors: color } } },
+                        yaxis: { labels: { style: { colors: color } } },
+                        grid: { borderColor: gridColor }
+                    });
+
+                    chartPie.updateOptions({
+                        legend: { labels: { colors: color } },
+                        plotOptions: { pie: { donut: { labels: { total: { color: donutTotalColor } } } } }
+                    });
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, { attributes: true });
+    </script>
+</body>
+
+</html>
