@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arisan UI - Profile</title>
+
+    <!-- Scripts & Styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../assets/js/config.js"></script>
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="../assets/js/app.js"></script>
+</head>
+
+<body
+    class="bg-gray-50 dark:bg-dark-bg text-gray-800 dark:text-gray-200 font-sans antialiased transition-colors duration-300"
+    x-data="vibeApp">
+
+    <div class="layout-wrapper">
+        <!-- Mobile Sidebar Backdrop -->
+        <div x-show="sidebarOpen" @click="sidebarOpen = false" x-transition.opacity
+            class="fixed inset-0 z-20 bg-black/50 lg:hidden"></div>
+
+        <!-- Sidebar (Loaded dynamically) -->
+        <aside id="sidebar-container" :class="[
+                sidebarOpen ? 'translate-x-0' : '-translate-x-full',
+                sidebarMini ? 'w-20 sidebar-mini' : 'w-64'
+               ]"
+            class="sidebar fixed inset-y-0 left-0 z-30 bg-white dark:bg-dark-surface border-r border-gray-200 dark:border-dark-border transition-all duration-300 lg:translate-x-0 lg:static flex flex-col">
+            <!-- Loading Skeleton -->
+            <div class="animate-pulse p-4 space-y-4">
+                <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded w-8 mx-auto lg:mx-0"></div>
+                <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                <div class="space-y-2 mt-8">
+                    <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content bg-gray-50 dark:bg-dark-bg transition-colors duration-300">
+            <header
+                class="h-16 bg-white dark:bg-dark-surface border-b border-gray-200 dark:border-dark-border flex items-center justify-between px-4 lg:px-8 sticky top-0 z-10">
+                <div class="flex items-center gap-4">
+                    <button @click="toggleSidebar" class="lg:hidden text-gray-500 hover:text-brand-600 transition">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <h2 class="text-lg font-bold text-gray-700 dark:text-white hidden sm:block">Profile</h2>
+                </div>
+
+                <div class="flex items-center gap-4 ml-auto">
+                    <button @click="isDark = !isDark"
+                        class="w-10 h-10 rounded-full flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        <i class="fa-solid fa-sun" x-show="!isDark"></i>
+                        <i class="fa-solid fa-moon" x-show="isDark" style="display: none;"></i>
+                    </button>
+                    <div
+                        class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold text-sm">
+                        A</div>
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto no-scrollbar p-4 lg:p-8 space-y-6">
+                <!-- User Profile Content -->
+                <div
+                    class="bg-white dark:bg-dark-surface p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-dark-border text-center">
+                    <div
+                        class="w-24 h-24 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl font-bold">
+                        A
+                    </div>
+                    <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Achmad User</h1>
+                    <p class="text-gray-500 dark:text-gray-400">Administrator</p>
+
+                    <div class="mt-8 flex justify-center gap-4">
+                        <button
+                            class="px-6 py-2 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition">Edit
+                            Profile</button>
+                        <button
+                            class="px-6 py-2 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition">Settings</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>
